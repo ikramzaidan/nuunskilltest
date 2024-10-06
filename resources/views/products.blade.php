@@ -46,28 +46,34 @@
                                 <th class="py-3 text-center">Description</th>
                                 <th class="py-3 text-center">Quantity</th>
                                 <th class="py-3 text-center">Price</th>
-                                <th></th>
+                                <th class="py-3 text-center"></th>
                             </tr>
                         </thead>
                 
                         <tbody class="text-gray-600 text-sm font-light">
-                            @foreach ($products as $product)
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-1 text-center">{{ $product->name }}</td>
-                                    <td class="py-1 text-center">{{ $product->description }}</td>
-                                    <td class="py-1 text-center">{{ $product->qty }}</td>
-                                    <td class="py-1 text-center">IDR {{ number_format($product->price, 0, ',', '.') }}</td>
-                                    <td>
-                                        <form action="{{ route('products.destroy', $product->id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 underline hover:text-red-800">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
+                            @if ($products->isEmpty())
+                                <tr>
+                                    <td colspan="5" class="py-3 text-center text-gray-500">Belum ada produk</td>
                                 </tr>
-                            @endforeach
+                            @else
+                                @foreach ($products as $product)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                        <td class="py-1 text-center">{{ $product->name }}</td>
+                                        <td class="py-1 text-center">{{ $product->description }}</td>
+                                        <td class="py-1 text-center">{{ $product->qty }}</td>
+                                        <td class="py-1 text-center">IDR {{ number_format($product->price, 0, ',', '.') }}</td>
+                                        <td class="py-1 px-3 md:px-1 text-center">
+                                            <form action="{{ route('products.destroy', $product->id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 underline hover:text-red-800">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
