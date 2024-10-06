@@ -49,7 +49,7 @@ class ProductController extends Controller
         ]);
         
         // Redirect ke halaman produk
-        return redirect('/products');
+        return redirect('/products')->with('success', 'Product successfully added!');
     }
 
     /**
@@ -58,7 +58,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
         //
     }
@@ -69,7 +69,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
         //
     }
@@ -92,8 +92,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        Product::where('id', $product->id)->delete();
+
+        return redirect('/products')->with('success', 'Product successfully deleted!');
     }
 }

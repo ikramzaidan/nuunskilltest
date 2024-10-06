@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>NUUN Products</title>
+        <title>NUUN</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -24,12 +24,19 @@
             <div class="w-full flex flex-col px-6 py-4 lg:px-12 xl:px-16">
 
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-                    <h2 class="text-2xl font-mono font-bold text-red-500">NUUN Products</h2>
-                    <form action="{{ route('products.store') }}" method="POST">
+                    <h2 class="text-2xl font-mono font-bold text-gray-700 hover:text-red-400">Products</h2>
+                    <form action="{{ route('products.store') }}" method="post">
                         @csrf
                         <button class="bg-gray-200 hover:bg-red-400 p-3 text-sm text-gray-700 dark:text-gray-500 underline" type="submit">Add New Product</button>
                     </form>
                 </div>
+
+                @if (session()->has('success'))
+                    <div class="flex items-center justify-between w-full bg-green-100 py-3 px-4 my-3" role="alert">
+                        <span class="text-green-800">{{ session('success') }}</span>
+                        <button type="button" class="text-green-600 hover:text-green-800" onclick="this.parentElement.style.display='none'">&times;</button>
+                    </div>
+                @endif
 
                 <div class="bg-white shadow-md p-3 mb-6 overflow-x-auto sm:overflow-x-visible">
                     <table class="min-w-max w-full table-auto">
@@ -39,6 +46,7 @@
                                 <th class="py-3 text-center">Description</th>
                                 <th class="py-3 text-center">Quantity</th>
                                 <th class="py-3 text-center">Price</th>
+                                <th></th>
                             </tr>
                         </thead>
                 
@@ -49,6 +57,15 @@
                                     <td class="py-1 text-center">{{ $product->description }}</td>
                                     <td class="py-1 text-center">{{ $product->qty }}</td>
                                     <td class="py-1 text-center">IDR {{ number_format($product->price, 0, ',', '.') }}</td>
+                                    <td>
+                                        <form action="{{ route('products.destroy', $product->id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 underline hover:text-red-800">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
